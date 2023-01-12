@@ -1,10 +1,18 @@
 
 
 let computerSelection;
-let playerSelection=prompt("Choose Rock, Paper or Scissors: ");
+let playerSelection;
+let winScore=0;
+let loseScore=0;
 
 
-const getComputerChoice =()=>
+
+
+
+const game=()=>
+{
+
+    const getComputerChoice =()=>
 {
     let num = Math.floor(Math.random()*3)+1;
     switch(num){
@@ -23,30 +31,36 @@ const getComputerChoice =()=>
     return computerSelection;
 }
 
-const playRound=(playerSelection, computerSelection)=>{
-    let win =`You Win! ${playerSelection} beats ${computerSelection}`;
-    let lose =`You Lose! ${computerSelection} beats ${playerSelection}`;
-    let playerUP = playerSelection.toUpperCase();
-    let computerUP = computerSelection.toUpperCase();
 
-    if(playerUP=="ROCK" && computerUP== "SCISSORS"){
-        return win;
-    }else if(playerUP=="ROCK" && computerUP== "PAPER"){
-        return lose;
-    }else if(playerUP=="PAPER" && computerUP== "ROCK"){
-        return win;
-    }else if(playerUP=="PAPER" && computerUP== "SCISSORS"){
-        return lose;
-    }else if(playerUP=="SCISSORS" && computerUP== "PAPER"){
+    const playRound=(playerSelection, computerSelection)=>{
+        let win =`You Win! ${playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1)} beats ${computerSelection}`;
+        let lose =`You Lose! ${computerSelection} beats ${playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1)}`;
+        let playerUP = playerSelection.toUpperCase();
+        let computerUP = computerSelection.toUpperCase();
+    
+        if(playerUP=="ROCK" && computerUP== "SCISSORS" || playerUP=="PAPER" && computerUP== "ROCK" || playerUP=="SCISSORS" && computerUP== "PAPER"){
+            winScore++;
+            return win;
+        }else if(playerUP=="ROCK" && computerUP== "PAPER" || playerUP=="PAPER" && computerUP== "SCISSORS" || playerUP=="SCISSORS" && computerUP== "ROCK"){
+            loseScore++;
+            return lose;
+        }else if(playerUP===computerUP){
+            return `It's a Tie! You both chose ${computerSelection}`
+        }
 
-        return win;
-    }else if(playerUP=="SCISSORS" && computerUP== "ROCK"){
-        return lose;
-    }else if(playerUP===computerUP){
-        return `It's a Tie! You both chose ${playerUP}`
+    }
+    for(let i=0; i<5; i++){
+        getComputerChoice();
+        playerSelection=prompt("Choose Rock, Paper or Scissors: ");
+        console.log(playRound(playerSelection,computerSelection));
+    }
+    if (winScore>loseScore){
+        console.log(`You are the final WINNER! Congratulation!\nFinal Score: ${winScore} : ${loseScore}`)
+    } else if (loseScore>winScore){
+        console.log(`You have lost... Better luck next time!\nFinal Score: ${winScore} : ${loseScore}`)
     }
 }
 
 
-getComputerChoice();
-console.log(playRound(playerSelection,computerSelection));
+game(playerSelection,computerSelection);
+// console.log(playRound(playerSelection,computerSelection));
