@@ -1,23 +1,35 @@
-console.log("Hello World!");
+
+
+let computerSelection;
+let playerSelection=prompt("Choose Rock, Paper or Scissors: ");
+
 
 const getComputerChoice =()=>
 {
     let num = Math.floor(Math.random()*3)+1;
-    let choice;
     switch(num){
         case 1:
-            choice="Rock";
+            computerSelection="Rock";
             break;
         case 2:
-            choice="Paper";
+            computerSelection="Paper";
             break;
         case 3:
-            choice="Scissors";
+            computerSelection="Scissors";
             break;
         default:
-            console.log("Error Occured");
+            computerSelection.log("Error Ocurred");
     }
-    console.log("Computer chose:", choice);
+    console.log("Computer chose:", computerSelection);
+    return computerSelection;
 }
 
+const playRound=(playerSelection, computerSelection)=>{
+    let win =`You Win! ${playerSelection} beats ${computerSelection}`;
+    let lose =`You Lose! ${computerSelection} beats ${playerSelection}`;
+}
+
+
 getComputerChoice();
+console.log(computerSelection)
+console.log(playerSelection);
