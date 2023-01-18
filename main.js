@@ -4,6 +4,12 @@ let computerSelection;
 let playerSelection;
 let winScore=0;
 let loseScore=0;
+let counter=0;
+
+const buttons=document.querySelectorAll("button");
+const newGame=document.getElementById("new-game");
+const result=document.getElementById("result");
+const container=document.getElementById("container");
 
 
 
@@ -11,7 +17,7 @@ let loseScore=0;
 
 const game=()=>
 {
-
+   
     const getComputerChoice =()=>
 {
     let num = Math.floor(Math.random()*3)+1;
@@ -32,35 +38,63 @@ const game=()=>
 }
 
 
+    // Main game function
     const playRound=(playerSelection, computerSelection)=>{
-        let win =`You Win! ${playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1)} beats ${computerSelection}`;
-        let lose =`You Lose! ${computerSelection} beats ${playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1)}`;
-        let playerUP = playerSelection.toUpperCase();
-        let computerUP = computerSelection.toUpperCase();
+        let win =`You Win! ${playerSelection} beats ${computerSelection}! `;
+        let lose =`You Lose! ${computerSelection} beats ${playerSelection}! `;
+        let tie=`It's a Tie! You both chose ${computerSelection}! `;
     
-        if(playerUP=="ROCK" && computerUP== "SCISSORS" || playerUP=="PAPER" && computerUP== "ROCK" || playerUP=="SCISSORS" && computerUP== "PAPER"){
+        if(playerSelection=="Rock" && computerSelection== "Scissors" || playerSelection=="Paper" && computerSelection== "Rock" || playerSelection=="Scissors" && computerSelection== "Paper"){
             winScore++;
-            return win;
-        }else if(playerUP=="ROCK" && computerUP== "PAPER" || playerUP=="PAPER" && computerUP== "SCISSORS" || playerUP=="SCISSORS" && computerUP== "ROCK"){
+            counter++;
+            counter!=5? result.textContent=win+`Current score is ${winScore} : ${loseScore}` : result.textContent=win+`FINAL score is ${winScore} : ${loseScore}`  ;
+            container.appendChild(result);
+        }else if(playerSelection=="Rock" && computerSelection== "Paper" || playerSelection=="Paper" && computerSelection== "Scissors" || playerSelection=="Scissors" && computerSelection== "Rock"){
             loseScore++;
-            return lose;
-        }else if(playerUP===computerUP){
-            return `It's a Tie! You both chose ${computerSelection}`
+            counter++;
+            counter!=5? result.textContent=lose+`Current score is ${winScore} : ${loseScore}`: result.textContent=lose+`FINAL score is ${winScore} : ${loseScore}`  ;
+            container.appendChild(result);
+        }else if(playerSelection===computerSelection){
+            counter!=5? result.textContent=tie+`Current score is ${winScore} : ${loseScore}`: result.textContent=tie+`FINAL score is ${winScore} : ${loseScore}`  ;
+            container.appendChild(result);
         }
+        // Game Over after 5 rounds
+        if (counter>=5){
+            buttons.forEach((button)=>{
+                button.disabled=true;
+            })
+            newGame.style.display="flex";
+            newGame.disabled=false;
+        }
+    }
 
-    }
-    for(let i=0; i<5; i++){
+
+    // On click function for buttons
+    function selectThis(e){
         getComputerChoice();
-        playerSelection=prompt("Choose Rock, Paper or Scissors: ");
-        console.log(playRound(playerSelection,computerSelection));
+        playerSelection=e.target.id;
+        playRound(playerSelection,computerSelection);
+        console.log(counter);
     }
-    if (winScore>loseScore){
-        console.log(`You are the final WINNER! Congratulation!\nFinal Score: ${winScore} : ${loseScore}`)
-    } else if (loseScore>winScore){
-        console.log(`You have lost... Better luck next time!\nFinal Score: ${winScore} : ${loseScore}`)
+    buttons.forEach((button)=>{
+        button.addEventListener("click",selectThis)
+    })
+
+    // New Game Function
+    function Restart(){
+        counter=0;
+        winScore=0;
+        loseScore=0;
+        container.removeChild(result);
+        buttons.forEach((button)=>{
+            button.disabled=false;
+        })
+        newGame.style.display="none";
+        newGame.disabled=true;
     }
+    newGame.addEventListener("click",Restart);
+
 }
 
 
 game(playerSelection,computerSelection);
-// console.log(playRound(playerSelection,computerSelection));
